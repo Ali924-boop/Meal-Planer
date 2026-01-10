@@ -11,6 +11,7 @@ export interface Meal {
     mealTime: 'Breakfast' | 'Lunch' | 'Dinner';
     blocked: boolean;
     date: string;
+    season: 'Summer' | 'Winter' | 'Spring' | 'Autumn' | string; // ✅ Add season
 }
 
 export function generateMealsForDate(
@@ -22,7 +23,7 @@ export function generateMealsForDate(
     const date = !isNaN(Date.parse(dateStr)) ? parseISO(dateStr) : new Date();
     const safeDateStr = date.toISOString().split('T')[0];
 
-    const season = getSeason(date);
+    const season = getSeason(date); // current season
     const dayOfYear = getDayOfYear(date);
 
     const seasonData = seasonalDishes[season];
@@ -44,7 +45,8 @@ export function generateMealsForDate(
             type,
             mealTime,
             blocked: blockedMealIds.includes(_id),
-            date: safeDateStr
+            date: safeDateStr,
+            season, // ✅ Assign season here
         };
     };
 
@@ -68,6 +70,6 @@ export function generateMealsForDate(
 
     return {
         veg: meals.filter(m => m.type === 'Veg'),
-        nonVeg: meals.filter(m => m.type === 'Non-Veg')
+        nonVeg: meals.filter(m => m.type === 'Non-Veg'),
     };
 }
